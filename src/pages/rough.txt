@@ -1,0 +1,655 @@
+<style>
+.body {
+  background: #000;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.btn {
+  background: blue;
+  padding: 1rem 2rem;
+  border: 1px solid white;
+  /* animation-name: slideInLeft;
+  animation-duration: 2s; */
+
+  /*  animation-timing-function: ease-out; */ /* ease-in, ease-in-out , linear */
+  /*  animation-delay: 1s;
+  animation-iteration-count: 1; */
+  /* animation-direction: normal;  */ /* normal,reverse */
+  /*  animation-fill-mode: backwards ;*/ /* forwards ,backwards,both */
+  /*   transform: translateX(-150px); */
+}
+
+.btn:hover {
+  background: rgb(2, 132, 253);
+  padding: 1rem 2rem;
+  border: 1px solid white;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  transition-delay: 0s;
+  transform: translateY(-10px);
+  box-shadow: 0px 0px 10px 1px rgb(255, 187, 0); /* Adjust values as needed */
+}
+
+.animate {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animate.animate-infinite {
+  animation-iteration-count: infinite;
+}
+
+.animate.animate-delay-1s {
+  animation-delay: 1s;
+}
+
+.animate.animate-fast {
+  animation-duration: 3s;
+}
+
+.animate.animate-slow {
+  animation-duration: 9s;
+}
+
+.slideInLeft {
+  animation: slideInLeft 1s ease-in;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100vw);
+  }
+
+  to {
+    transform: translate(0);
+  }
+}
+
+.slideInRight {
+  animation: slideInRight 1s ease-in;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100vw);
+  }
+
+  to {
+    transform: translate(0);
+  }
+}
+
+.slideInTop {
+  animation: slideInTop 1s ease-in;
+}
+
+@keyframes slideInTop {
+  from {
+    transform: translateY(-100vw);
+  }
+
+  to {
+    transform: translate(0);
+  }
+}
+
+.rotateX {
+  animation-name: rotateX;
+  animation-timing-function: linear;
+  transform-origin: center;
+}
+
+@keyframes rotateX {
+  from {
+    transform: rotateX(0);
+  }
+  to {
+    transform: rotateX(-360deg);
+  }
+}
+
+.rotateY {
+  animation-name: rotateY;
+  animation-timing-function: linear;
+  transform-origin: center;
+}
+
+@keyframes rotateY {
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(-360deg);
+  }
+}
+
+.rotate {
+  animation-name: rotate;
+  animation-timing-function: linear;
+  transform-origin: center;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+</style>
+
+<template>
+  <div class="body vh-100 d-flex justify-content-center align-items-center">
+    <!--     <h1 class="text-light" style="text-shadow: 0px 0px 10px rgba(255, 2, 150, 0.9)">Animation</h1>
+ -->
+    <div class="flex-column">
+      <button type="button" class="btn m-3 rotateX animate animate-fast animate-infinite animate-delay-1s" style="background: blue">Primary</button>
+      <button type="button" class="btn m-3 rotateY animate animate-fast animate-infinite animate-delay-1s" style="background: rgb(0, 255, 76)">Primary</button>
+      <button type="button" class="btn m-3 rotate animate animate-infinite animate-fast" style="background: rgb(255, 0, 0)">Primary</button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Animation",
+};
+</script>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+<!-- <ol style="max-height: 250px; overflow-y: auto">
+                    <li v-for="day in itinerary" :key="day" class="bg-transparent text-dark mb-2" style="background-color: rgba(255, 255, 255, 0.7); border-radius: 8px">
+                      <h4>{{ Object.keys(day)[0] }}</h4>
+                      <ul>
+                        <li v-for="line in Object.values(day)[0]" :key="line" class="bg-transparent">
+                          <span v-html="highlightWords(line)"></span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ol> -->
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<style scoped>
+.main {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100%;
+  height: 100vh;
+  transition: background 1.5s ease;
+}
+.container {
+  height: 90vh;
+}
+
+@media (max-width: 576px) {
+  .main {
+    height: auto; /* Adjust height for small screens */
+  }
+}
+</style>
+
+<template>
+  <div class="vh-100">
+    <div class="main" :style="{ 'background-image': 'url(' + items[imageIndex].imageUrl + ')' }">
+      <div class="vh-100">
+        <div class="container-fluid">
+          <div class="row gx-1">
+            <div class="col" v-for="(progress, i) in progressBars" :key="i">
+              <div class="progress bg-secondary mt-1" :style="{ height: '3px', marginBottom: '5px' }">
+                <div class="progress-bar" role="progressbar" :style="{ width: progress + '%' }" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+          <div class="container d-flex justify-content-center align-items-center bg-light mt-5 p-5 rounded-4">
+            <!-- <div class="container2">
+              <div class="row gx-3">
+                <div class="col-4 col-md-4 col-sm-4 col-xl-4">
+                  <div>
+                    <input type="text" class="form-control shadow-lg" placeholder="Destination" />
+                  </div>
+                </div>
+                <div class="col-4 col-md-4 col-sm-4 col-xl-4">
+                  <div>
+                    <input type="number" class="form-control shadow-lg" placeholder="Number Of Days" />
+                  </div>
+                </div>
+                <div class="col-4 col-md-4 col-sm-4 col-xl-4">
+                  <div>
+                    <input type="date" class="form-control shadow-lg" placeholder="Start Date" />
+                  </div>
+                </div>
+              </div>
+              <div class="row gx-3 mt-2">
+                <div class="col-4 col-md-4 col-sm-4 col-xl-4">
+                  <div>
+                    <input type="number" class="form-control shadow-lg" placeholder="Number Of People" />
+                  </div>
+                </div>
+                <div class="col-4 col-md-4 col-sm-4 col-xl-4">
+                  <div>
+                    <input type="text" class="form-control shadow-lg" placeholder="Preference" />
+                  </div>
+                </div>
+                <div class="col-4 col-md-4 col-sm-4 col-xl-4">
+                  <div>
+                    <input type="number" class="form-control shadow-lg" placeholder="Budget" />
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-end mt-2">
+                <button type="button" @click="handleSubmit" class="btn btn-primary">Go <i class="bi bi-arrow-right"></i></button>
+              </div>
+            </div> -->
+            <div class="">
+              <div class="">
+                <div>
+                  <ol>
+                    <li v-for="(day, dayIndex) in itinerary" :key="dayIndex" class="bg-transparent text-dark mb-2" style="background-color: rgba(255, 255, 255, 0.7); border-radius: 8px">
+                      <h4>{{ Object.keys(day)[0] }}</h4>
+                      <ul>
+                        <li v-for="(line, lineIndex) in Object.values(day)[0]" :key="lineIndex" class="bg-transparent">
+                          {{ line }}
+                        </li>
+                      </ul>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Body2",
+  data() {
+    return {
+      name_entity: ["word111", "word123", "word131"],
+      loadingPercentage: 0,
+      activeIndex: 0,
+      itinerary: [],
+      imageIndex: 0,
+      items: [{ imageUrl: "/src/assets/body/pexels-artem-saranin-1214011.jpg" }, { imageUrl: "/src/assets/body/pexels-dillon-kydd-11523148.jpg" }, { imageUrl: "/src/assets/body/pexels-james-wheeler-1539225.jpg" }, { imageUrl: "/src/assets/body/pexels-mayur-sable-13612812.jpg" }],
+      progressBars: [0, 0, 0, 0],
+      rawItinerary:
+        "\n\nDay 1: \n1. word111 word112 word113\n2. word121 word122 word123\n3. word131 word132 word133\n\nDay 2: \n1. word211 word212 word213\n2. word221 word222 word223\n3. word231 word232 word233\n\nDay 3: \n1. word311 word312 word313\n2. word321 word322 word323\n3. word331 word332 word333",
+    };
+  },
+  created() {
+    /* console.log("raw itinerary", this.rawItinerary); */
+    const tempItinerary1 = this.rawItinerary.split("\n\n");
+    var tempItinerary2 = [];
+    var tempItinerary3 = [];
+    for (var day of tempItinerary1) {
+      day = day.trim(); // Remove extra whitespaces
+
+      if (day.length > 0) {
+        tempItinerary2.push(day);
+      }
+    }
+
+    /*  console.log("day itinerary", tempItinerary2); */
+    for (var day of tempItinerary2) {
+      const tempItinerary = day.split("\n");
+      // Assuming the first word is a valid JavaScript identifier
+      var tempDay = {};
+      tempDay[tempItinerary[0].trim()] = [];
+
+      for (var j = 1; j < tempItinerary.length; j++) {
+        tempDay[tempItinerary[0].trim()].push(tempItinerary[j].trim());
+      }
+
+      tempItinerary3.push(tempDay);
+    }
+    this.itinerary = tempItinerary3;
+    console.log("sub day itinerary", this.itinerary);
+
+    //converting each line of day to words of array
+  },
+  mounted() {
+    this.startProgress();
+  },
+  methods: {
+    async handleSubmit() {},
+    startProgress() {
+      setInterval(() => {
+        this.loadingPercentage += 5;
+        this.progressBars[this.activeIndex] = this.loadingPercentage;
+        if (this.loadingPercentage > 105) {
+          this.loadingPercentage = 0;
+          this.progressBars[this.activeIndex] = 0;
+          /*  console.log("progressbar", this.progressBars.length);
+          console.log("activeindex", this.activeIndex); */
+          if (this.activeIndex < this.progressBars.length - 1) {
+            // Change the background image to the next one
+            this.imageIndex = (this.imageIndex + 1) % this.items.length;
+            // Move to the next progress bar
+            this.activeIndex++;
+          } else {
+            this.imageIndex = (this.imageIndex + 1) % this.items.length;
+            // Reset to the first progress bar
+            this.activeIndex = 0;
+          }
+        }
+      }, 200);
+    },
+  },
+};
+</script>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<style scoped>
+.main {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100%;
+  height: 100vh;
+  transition: background 1.5s ease;
+}
+.container {
+  height: 90vh;
+}
+
+@media (max-width: 576px) {
+  .main {
+    height: auto; /* Adjust height for small screens */
+  }
+}
+.carousel-inner {
+  width: 100%;
+}
+
+.cards-wrapper {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card {
+  margin: 0.5rem;
+  width: calc(100% / 5);
+}
+
+.image-wrapper {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+}
+</style>
+
+<template>
+  <div class="vh-100">
+    <div class="main" :style="{ 'background-image': 'url(' + items[imageIndex].imageUrl + ')' }">
+      <div class="vh-100">
+        <div class="container-fluid">
+          <div class="row gx-1">
+            <div class="col" v-for="(progress, i) in progressBars" :key="i">
+              <div class="progress bg-secondary mt-1" :style="{ height: '3px', marginBottom: '5px' }">
+                <div class="progress-bar" role="progressbar" :style="{ width: progress + '%' }" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+          <div class="container d-flex justify-content-center align-items-center bg-transparent mt-5 p-5 rounded-4">
+            <div id="carouselExampleControls" class="carousel slide carousel-dark" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div class="cards-wrapper">
+                    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?goa,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?goa,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?goa,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?goa,river" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?goa,forest" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="cards-wrapper">
+                    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?maharastra,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?maharastra,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?maharastra,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?maharastra,river" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?maharastra,forest" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="cards-wrapper">
+                    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?kerala,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?kerala,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?kerala,dark" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?kerala,river" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 10rem">
+                      <div class="image-wrapper">
+                        <img src="https://source.unsplash.com/1400x720/?kerala,forest" class="card-img-top" alt="..." />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Body2",
+  data() {
+    return {
+      name_entity: ["word221", "word123", "word332", "word121", "word122", "word133", "word331", "word332", "word333"],
+      loadingPercentage: 0,
+      activeIndex: 0,
+      itinerary: [],
+      imageIndex: 0,
+      items: [{ imageUrl: "/src/assets/body/pexels-artem-saranin-1214011.jpg" }, { imageUrl: "/src/assets/body/pexels-dillon-kydd-11523148.jpg" }, { imageUrl: "/src/assets/body/pexels-james-wheeler-1539225.jpg" }, { imageUrl: "/src/assets/body/pexels-mayur-sable-13612812.jpg" }],
+      progressBars: [0, 0, 0, 0],
+      rawItinerary:
+        "\n\nDay 1: \n1. word111 word112 word113\n2. word121 word122 word123\n3. word131 word132 word133\n\nDay 2: \n1. word211 word212 word213\n2. word221 word222 word223\n3. word231 word232 word233\n\nDay 3: \n1. word311 word312 word313\n2. word321 word322 word323\n3. word331 word332 word333",
+    };
+  },
+  created() {
+    /* console.log("raw itinerary", this.rawItinerary); */
+    const tempItinerary1 = this.rawItinerary.split("\n\n");
+    var tempItinerary2 = [];
+    var tempItinerary3 = [];
+    for (var day of tempItinerary1) {
+      day = day
+        .replace(/\\n/g, "\n")
+        .replace(/\\t/g, "")
+        .replace(/(\d+\.\s+)/g, (match) => match.trim());
+
+      if (day.length > 0) {
+        tempItinerary2.push(day);
+      }
+    }
+
+    /*  console.log("day itinerary", tempItinerary2); */
+    for (var day of tempItinerary2) {
+      const tempItinerary = day.split("\n");
+      // Assuming the first word is a valid JavaScript identifier
+      var tempDay = {};
+      tempDay[tempItinerary[0].trim()] = [];
+
+      for (var j = 1; j < tempItinerary.length; j++) {
+        tempDay[tempItinerary[0].trim()].push(tempItinerary[j].trim());
+      }
+
+      tempItinerary3.push(tempDay);
+    }
+    this.itinerary = tempItinerary3;
+    console.log("sub day itinerary", this.itinerary);
+
+    //converting each line of day to words of array
+  },
+  mounted() {
+    this.startProgress();
+  },
+  methods: {
+    highlightWords(line) {
+      const wordsToHighlight = this.name_entity;
+      return line
+        .split(/\b/)
+        .map((word) => (wordsToHighlight.includes(word.trim()) ? `<span style="background-color: yellow">${word}</span>` : word))
+        .join("");
+    },
+
+    async handleSubmit() {},
+    startProgress() {
+      setInterval(() => {
+        this.loadingPercentage += 5;
+        this.progressBars[this.activeIndex] = this.loadingPercentage;
+        if (this.loadingPercentage > 105) {
+          this.loadingPercentage = 0;
+          this.progressBars[this.activeIndex] = 0;
+          /*  console.log("progressbar", this.progressBars.length);
+          console.log("activeindex", this.activeIndex); */
+          if (this.activeIndex < this.progressBars.length - 1) {
+            // Change the background image to the next one
+            this.imageIndex = (this.imageIndex + 1) % this.items.length;
+            // Move to the next progress bar
+            this.activeIndex++;
+          } else {
+            this.imageIndex = (this.imageIndex + 1) % this.items.length;
+            // Reset to the first progress bar
+            this.activeIndex = 0;
+          }
+        }
+      }, 200);
+    },
+  },
+};
+</script>
